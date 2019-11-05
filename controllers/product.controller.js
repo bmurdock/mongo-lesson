@@ -5,15 +5,13 @@ exports.test = function (req, res, next) {
 }
 
 exports.create = function (req, res, next) {
-    console.log('starting create process');
-    const product = new Product(
-        {
-            name: req.body.name,
-            description: req.body.description,
-            price: req.body.price
-        }
-    );
-    console.log('starting save process');
+    if (typeof req.body.name !== 'string' || req.body.name === '' || req.body.name.length < 3) {
+        res.send("You must have a valid product name.")
+        return;
+    }
+
+    const product = new Product(req.body);
+
     product.save(function (err, result) {
         if (err) {
             return next(err);
@@ -33,6 +31,20 @@ exports.getProducts = function (req, res, next) {
         res.send(results);
     });
 }
+
+exports.getProductById = function (req, res, next) {
+
+    const query = {
+        _id: req.params.id
+    };
+    Product.find(query, function (err, results) {
+        if (err) {
+            return next(err);
+        }
+        console.log('getProductsById results: ', results);
+        res.send(results);
+    });
+};
 
 exports.updateProduct = function (req, res, next) {
     const query = {
