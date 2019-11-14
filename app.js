@@ -3,6 +3,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const products = require('./routes/product.routes');
 const providers = require('./routes/productProvider.routes');
+const cors = require('cors')
 
 // Set our global constant stuff here
 const apiPort = 3444;
@@ -16,6 +17,8 @@ const api = express();
 
 // Tell our apps and clients and whatnot to use...stuff...(middleware)
 api.use(express.json());
+// We only need to use cors if we have a form that uploads images/files
+api.use(cors());
 api.use('/products', products);
 api.use('/product-providers', providers);
 

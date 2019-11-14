@@ -23,7 +23,7 @@ exports.create = function (req, res, next) {
 
 exports.getProducts = function (req, res, next) {
     const query = {};
-    Product.find(query, function (err, results) {
+    Product.find(query).populate('productProvider').exec(function (err, results) {
         if (err) {
             return next(err);
         }
